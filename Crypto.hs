@@ -1,3 +1,5 @@
+module Crypto (caesar_encrypt, caesar_decrypt, vigenere_encrypt, vigenere_decrypt) where
+
 import Data.Char
 
 -- helping functions
@@ -28,22 +30,21 @@ caesar_decrypt :: [Char] -> Int -> [Char]
 caesar_decrypt xs n = shiftLeftAndRigth xs n '-'
 
 
--- Vignere Cipher
+-- Vigenere Cipher
 
-toNum :: [Char] -> [Int]
-toNum [] = []
-toNum xs = map ord xs
+vigenere_encrypt :: [Char] -> [Char] -> [Char]
+vigenere_encrypt [] key = []
+vigenere_encrypt xs [] = []
+vigenere_encrypt xs key = concat ([shiftLeftAndRigth [c] (ord k) '+' | (c,k)<- zip [c |c<-xs ] [k | k<-(take (length xs) (cycle key))]]) -- list comprehension com paralelismo ==  [x+y | x<-a | y<-b]
 
 
-vignere_encrypt :: [Char] -> [Char] -> [Char]
-vignere_encrypt [] key = []
-vignere_encrypt xs [] = []
-vignere_encrypt xs key = map chr (zipWith (+) (toNum xs) (toNum (take (length xs) (cycle key))) )
+vigenere_decrypt :: [Char] -> [Char] -> [Char]
+vigenere_decrypt [] key = []
+vigenere_decrypt xs [] = []
+vigenere_decrypt xs key = concat ([shiftLeftAndRigth [c] (ord k) '-' | (c,k)<- zip [c |c<-xs ] [k | k<-(take (length xs) (cycle key))]])
 
-zipWith (+) "abc" (take 3 (cycle "a"))
 
-vignere_encrypt :: [Char] -> [Char] -> [Char]
-vignere_encrypt [] key = []
-vignere_encrypt xs [] = []
-vignere_encrypt xs key = map chr ([shiftLeftAndRigth xs (ord k) '+' | k<-(take (length xs) (cycle key))]) 
+-- ADFGVX Cipher
+
+
 
